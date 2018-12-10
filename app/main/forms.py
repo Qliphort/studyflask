@@ -2,6 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, TextAreaField, BooleanField, SelectField
 from wtforms.validators import DataRequired, Length, Email, Regexp
 from wtforms import ValidationError
+from flask_pagedown.fields import PageDownField
 from ..model import Role, User
 
 
@@ -34,7 +35,7 @@ class EditProfileAdminForm(FlaskForm):
     def __init__(self, user, *args, **kwargs):
         super(EditProfileAdminForm, self).__init__(*args, **kwargs)
         self.role.choices = {(role.id, role.name)
-                             for role in Role.query.filter_by(Role.name).all()}
+                             for role in Role.query.order_by(Role.name).all()}
         self.user = user
 
     def validate_email(self, field):
@@ -46,3 +47,8 @@ class EditProfileAdminForm(FlaskForm):
         if field.data != self.user.username and \
                 User.query.filter_by(username=field.data).first():
             raise ValidationError('Username already in use.')
+
+
+class PostForm(FlaskForm):
+    body = PageDownField("What's your mind?", validators=[DataRequired()])
+    submit = SubmitField('Submit')
