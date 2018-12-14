@@ -36,12 +36,6 @@ def before_request():
         return forbidden('Unconfirmed account')
 
 
-@api.route('/posts/')
-@auth.login_required
-def get_posts():
-    pass
-
-
 @api.route('/token')
 def get_token():
     if g.current_user.is_anonymous() or g.token_used:

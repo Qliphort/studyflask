@@ -5,6 +5,7 @@ from . import api
 from .decorators import permission_required
 from .errors import forbidden
 
+
 @api.route('/posts/')
 def get_posts():
     page = request.args.get('page', 1, type=int)
@@ -25,8 +26,8 @@ def get_posts():
         'count': pagination.total
     })
 
+
 @api.route('/posts/<int:id>')
-@auth.login_required
 def get_post(id):
     post = Post.query.get_or_404(id)
     return jsonify(post.to_json())
